@@ -1,19 +1,39 @@
-// contentlayer.config.ts
-import { defineDocumentType, makeSource } from "contentlayer/source-files";
+import { defineDocumentType, makeSource } from "contentlayer2/source-files";
 
-export const Post = defineDocumentType(() => ({
+const Post = defineDocumentType(() => ({
   name: "Post",
-  filePathPattern: `**/*.md`,
+  filePathPattern: `blog/**/*.mdx`,
+  contentType: "mdx",
   fields: {
     title: { type: "string", required: true },
-    date: { type: "date", required: true },
+    description: {
+      type: "string",
+    },
+    date: {
+      type: "date",
+    },
+    piblished: {
+      type: "boolean",
+      default: true,
+    },
+    image: {
+      type: "string",
+      required: true,
+    },
   },
   computedFields: {
-    url: {
+    slug: {
       type: "string",
-      resolve: (post) => `/posts/${post._raw.flattenedPath}`,
+      resolve: (doc) => `/${doc._raw.flattenedPath}`,
+    },
+    slugAsParams: {
+      type: "string",
+      resolve: (doc) => doc._raw.flattenedPath.split("/")[1],
     },
   },
 }));
 
-export default makeSource({ contentDirPath: "posts", documentTypes: [Post] });
+export default makeSource({
+  contentDirPath: "./content",
+  documentTypes: [Post],
+});

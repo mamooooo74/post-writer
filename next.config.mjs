@@ -1,4 +1,5 @@
+import { withContentlayer } from "next-contentlayer2";
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = { reactStrictMode: true, swcMinify: true };
 
-export default nextConfig;
+export default withContentlayer(nextConfig);
